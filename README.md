@@ -29,7 +29,7 @@
 ## 3. Process   
 분석은 다음 순서로 진행됩니다. 화살표를 **클릭**하시면 자세한 설명을 참고하실 수 있습니다.   
 <details>
-<summary> 1. </summary>
+<summary> 1. 변수 생성 </summary>
 <div markdown="1">
 
 |제목|내용|
@@ -39,6 +39,48 @@
 
 </div>
 </details>
+
+
+<details>
+<summary> 2. 변수 정제 및 결측값 제거 </summary>
+<div markdown="1">
+
+|제목|내용|
+|--|--|
+|1|1|
+|2|10|
+
+</div>
+</details>
+
+
+<details>
+<summary> 3. Modeling </summary>
+<div markdown="1">
+
+|제목|내용|
+|--|--|
+|1|1|
+|2|10|
+
+</div>
+</details>   
+
+
+
+   
+<details>
+<summary> 4. 날짜에 기반한 최적 편성 방안 </summary>
+<div markdown="1">
+
+|제목|내용|
+|--|--|
+|1|1|
+|2|10|
+
+</div>
+</details>   
+
 
    
 ## 4. File Directory
