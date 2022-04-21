@@ -53,11 +53,10 @@
 
 
 <details>
-<summary> 2. 변수 정제 및 결측값 제거 </summary>
-<div markdown="1">   
-   
+<summary>2. 변수 정제 및 결측값 제거</summary>
+<div markdown="1">
  
-    
+  
  * 범주형 변수는 **one-hot-encoding** 방법을, 연속형 변수는 **MinMaxScaler** 방법을 사용하여 정제합니다.   
  
  * MAPE 계산 시 오류를 방지하기 위해 NA값을 **제거**합니다.   
