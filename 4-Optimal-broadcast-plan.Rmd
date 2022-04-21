@@ -1,0 +1,632 @@
+---
+title: "Untitled"
+author: "202STG17 유채연"
+date: '2020 9 27 '
+output: html_document
+---
+
+## 시간 편성 방안 eda
+
+```{r}
+
+rm(list=ls())
+library(readxl)
+library(tidyverse)
+broad<-read_xlsx("C:/Users/user/Documents/카카오톡 받은 파일/broadcast_final.xlsx")
+str(broad)
+```
+
+```{r}
+pal<-c("#B0DFE5","#95C8D8", "#89CFF0","#73C2FB","4C516D","#008ECC","#57A0D3","#4682B4", 
+                                   "#588BAE","#7285A5","#4F97A3","#008081")
+pal1<-c("#B0DFE5","#95C8D8", "#89CFF0","#73C2FB","4C516D","#008ECC","#57A0D3","#4682B4", 
+                                   "#588BAE","#7285A5","#4F97A3","#008081","#D0F0C0", "#9DC183","#50C878","#00A86B","#00A572","#2E9B57","#01796F","#4F7942","#3f704d","#4B5320","#444C38","#043927")
+pal2<-c("#FCF4A3", "#F8DE7E","#FADA5E", "#FFD300","#FFBF00","#FDA50F", "#DAA520","#C49102")
+
+```
+
+
+```{r}
+morning<-broad%>%filter(time>=6&time<=7)%>%group_by(Product_group)%>%summarize(cumsum=mean(cumsum))
+morning_eda<-ggplot(data=morning, aes(x=Product_group, y=cumsum, fill=Product_group))+
+  theme_bw()+
+  geom_bar(stat='identity')+
+  ggtitle("아침 시간(06시~07시) 편성 방안")+
+  scale_fill_manual(values =pal)+
+  labs(x="상품군 대분류", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),legend.position='none')
+morning_eda
+
+
+morning_sub<-broad%>%filter(time>=6&time<=7)%>%group_by(Product_group,time)%>%summarize(cumsum=mean(cumsum))
+morning_sub_eda<-ggplot(data=morning_sub, aes(x=time, y=cumsum, fill=Product_group, group=Product_group))+
+  theme_bw()+
+  geom_bar(stat="identity", position="dodge")+
+  ggtitle("아침 시간(06~07시) 편성 방안")+
+  labs(x="시간", y="취급액")+
+    scale_fill_manual(values = pal1)+
+  theme(axis.text=element_text(size=8),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),
+        legend.position='right')+
+  scale_x_discrete(limits=c(6,7))
+
+morning_sub_eda
+
+
+```
+
+
+```{r}
+morning_prime<-broad%>%filter(time>=8 & time<=11)%>%group_by(Product_group)%>%summarize(cumsum=mean(cumsum))
+morning_prime_eda<-ggplot(data=morning_prime, aes(x=Product_group, y=cumsum, fill=Product_group))+
+  theme_bw()+
+  geom_bar(stat='identity')+
+  ggtitle("아침 프라임 시간(08시~11시) 편성 방안")+
+  scale_fill_manual(values =pal)+
+  labs(x="상품군 대분류", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),legend.position='none')
+
+morning_prime_eda
+
+
+morning_prine_sub<-broad%>%filter(time>=8 & time<=11 )%>%group_by(Product_group,time)%>%summarize(cumsum=mean(cumsum))
+morning_prine_sub_eda<-ggplot(data=morning_prine_sub, aes(x=time, y=cumsum, color=Product_group))+
+  theme_bw()+
+  geom_line(size=1)+
+  geom_point()+
+  ggtitle("아침 프라임 시간(08~11시) 편성 방안")+
+  labs(x="시간", y="취급액")+
+  theme(axis.text=element_text(size=8),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),
+        legend.position='right')
+
+morning_prine_sub_eda
+```
+
+```{r}
+lunch<-broad%>%filter(time>=12 & time<=15)%>%group_by(Product_group)%>%summarize(cumsum=mean(cumsum))
+lunch_eda<-ggplot(data=lunch, aes(x=Product_group, y=cumsum, fill=Product_group))+
+  theme_bw()+
+  geom_bar(stat='identity')+
+  ggtitle("점심 시간(12시~15시) 편성 방안")+
+  scale_fill_manual(values =pal)+
+  labs(x="상품군 대분류", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),legend.position='none')
+
+lunch_eda
+
+
+lunch_sub<-broad%>%filter(time>=12&time<=15)%>%group_by(Product_group,time)%>%summarize(cumsum=mean(cumsum))
+lunch_sub_eda<-ggplot(data=lunch_sub, aes(x=time, y=cumsum, color=Product_group, group=Product_group))+
+  theme_bw()+
+  geom_line(size=1)+
+  geom_point()+
+  ggtitle("점심 시간(12~15시) 편성 방안")+
+  labs(x="시간", y="취급액")+
+    scale_fill_manual(values = pal1)+
+  theme(axis.text=element_text(size=8),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),
+        legend.position='right')
+
+lunch_sub_eda
+```
+
+
+```{r}
+noon<-broad%>%filter(time>=16 & time<=19)%>%group_by(Product_group)%>%summarize(cumsum=mean(cumsum))
+noon_eda<-ggplot(data=noon, aes(x=Product_group, y=cumsum, fill=Product_group))+
+  theme_bw()+
+  geom_bar(stat='identity')+
+  ggtitle("오후 시간(16시~19시) 편성 방안")+
+  scale_fill_manual(values =pal)+
+  labs(x="상품군 대분류", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),legend.position='none')
+
+noon_eda
+
+
+
+noon_sub<-broad%>%filter(time>=16&time<=19)%>%group_by(Product_group,time)%>%summarize(cumsum=mean(cumsum))
+noon_sub_eda<-ggplot(data=noon_sub, aes(x=time, y=cumsum, color=Product_group, group=Product_group))+
+  theme_bw()+
+  geom_line(size=1)+
+  geom_point()+
+  ggtitle("오후 시간(16~19시) 편성 방안")+
+  labs(x="시간", y="취급액")+
+    scale_fill_manual(values = pal1)+
+  theme(axis.text=element_text(size=8),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),
+        legend.position='right')
+
+noon_sub_eda
+```
+
+```{r}
+afternoon_prime<-broad%>%filter(time>=20 & time<=23)%>%group_by(Product_group)%>%summarize(cumsum=mean(cumsum))
+afternoon_eda<-ggplot(data=afternoon_prime, aes(x=Product_group, y=cumsum, fill=Product_group))+
+  theme_bw()+
+  geom_bar(stat='identity')+
+  ggtitle("오후 프라임 시간(20시~23시) 편성 방안")+
+  scale_fill_manual(values =pal)+
+  labs(x="상품군 대분류", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),legend.position='none')
+
+afternoon_eda
+
+
+afternoon_sub<-broad%>%filter(time>=20&time<=23)%>%group_by(Product_group,time)%>%summarize(cumsum=mean(cumsum))
+afternoon_sub_eda<-ggplot(data=afternoon_sub, aes(x=time, y=cumsum, color=Product_group, group=Product_group))+
+  theme_bw()+
+  geom_line(size=1)+
+  geom_point()+
+  ggtitle("오후 프라임 시간(20~23시) 편성 방안")+
+  labs(x="시간", y="취급액")+
+    scale_fill_manual(values = pal1)+
+  theme(axis.text=element_text(size=8),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),
+        legend.position='right')
+
+afternoon_sub_eda
+```
+
+```{r}
+dawn<-broad%>%filter(time>=24)%>%group_by(Product_group)%>%summarize(cumsum=mean(cumsum))
+dawn_eda<-ggplot(data=dawn, aes(x=Product_group, y=cumsum, fill=Product_group))+
+  theme_bw()+
+  geom_bar(stat='identity')+
+  ggtitle("새벽 시간(24시~26시) 편성 방안")+
+  scale_fill_manual(values =pal)+
+  labs(x="상품군 대분류", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),legend.position='none')
+
+dawn_eda
+
+dawn_sub<-broad%>%filter(time>=24&time<=25)%>%group_by(Product_group,time)%>%summarize(cumsum=mean(cumsum))
+dawn_sub_eda<-ggplot(data=dawn_sub, aes(x=time, y=cumsum, fill=Product_group, group=Product_group))+
+  theme_bw()+
+  geom_bar(stat="identity", position="dodge")+
+  ggtitle("새벽 시간(24~26시) 편성 방안")+
+  labs(x="시간", y="취급액")+
+    scale_fill_manual(values = pal1)+
+  theme(axis.text=element_text(size=8),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),
+        legend.position='right')+
+  scale_x_discrete(limits=c(24,25))
+
+dawn_sub_eda
+```
+
+## 카테고리별
+```{r}
+food<-broad%>%filter(group0==1)%>%group_by(time)%>%summarize(cumsum=mean(cumsum))
+food_eda<-ggplot(data=food, aes(x=time, y=cumsum, fill=time))+
+  theme_bw()+
+  geom_line(stat='identity')+
+  ggtitle("가공식품 편성 방안")+
+  labs(x="시간", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15))+
+  scale_x_discrete(limits=c(6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25))
+
+food_eda
+
+
+furniture<-broad%>%filter(group0==2)%>%group_by(time)%>%summarize(cumsum=mean(cumsum))
+furniture_eda<-ggplot(data=furniture, aes(x=time, y=cumsum, fill=time))+
+  theme_bw()+
+  geom_line(stat='identity')+
+  ggtitle("가구 편성 방안")+
+  labs(x="시간", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15))+
+  scale_x_discrete(limits=c(6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25))
+
+furniture_eda
+
+
+electricity<-broad%>%filter(group0==3)%>%group_by(time)%>%summarize(cumsum=mean(cumsum))
+electricity_eda<-ggplot(data=electricity, aes(x=time, y=cumsum, fill=time))+
+  theme_bw()+
+  geom_line(stat='identity')+
+  ggtitle("가전 편성 방안")+
+  labs(x="시간", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15))+
+  scale_x_discrete(limits=c(6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25))
+
+electricity_eda
+
+healthy<-broad%>%filter(group0==4)%>%group_by(time)%>%summarize(cumsum=mean(cumsum))
+healthy_eda<-ggplot(data=healthy, aes(x=time, y=cumsum, fill=time))+
+  theme_bw()+
+  geom_line(stat='identity')+
+  ggtitle("건강식품 편성 방안")+
+  labs(x="시간", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15))+
+  scale_x_discrete(limits=c(6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25))
+
+healthy_eda
+
+grain<-broad%>%filter(group0==5)%>%group_by(time)%>%summarize(cumsum=mean(cumsum))
+grain_eda<-ggplot(data=grain, aes(x=time, y=cumsum, fill=time))+
+  theme_bw()+
+  geom_line(stat='identity')+
+  ggtitle("농수축 편성 방안")+
+  labs(x="시간", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15))+
+  scale_x_discrete(limits=c(6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25))
+
+grain_eda
+
+life<-broad%>%filter(group0==6)%>%group_by(time)%>%summarize(cumsum=mean(cumsum))
+life_eda<-ggplot(data=life, aes(x=time, y=cumsum, fill=time))+
+  theme_bw()+
+  geom_line(stat='identity')+
+  ggtitle("생활용품 편성 방안")+
+  labs(x="시간", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15))+
+  scale_x_discrete(limits=c(6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25))
+
+life_eda
+
+underwear<-broad%>%filter(group0==7)%>%group_by(time)%>%summarize(cumsum=mean(cumsum))
+underwear_eda<-ggplot(data=underwear, aes(x=time, y=cumsum, fill=time))+
+  theme_bw()+
+  geom_line(stat='identity')+
+  ggtitle("속옷 편성 방안")+
+  labs(x="시간", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15))+
+  scale_x_discrete(limits=c(6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25))
+
+underwear_eda
+
+fashion<-broad%>%filter(group0==8)%>%group_by(time)%>%summarize(cumsum=mean(cumsum))
+fashion_eda<-ggplot(data=fashion, aes(x=time, y=cumsum, fill=time))+
+  theme_bw()+
+  geom_line(stat='identity')+
+  ggtitle("의류 편성 방안")+
+  labs(x="시간", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15))+
+  scale_x_discrete(limits=c(6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25))
+
+fashion_eda
+
+
+beauty<-broad%>%filter(group0==9)%>%group_by(time)%>%summarize(cumsum=mean(cumsum))
+beauty_eda<-ggplot(data=beauty, aes(x=time, y=cumsum, fill=time))+
+  theme_bw()+
+  geom_line(stat='identity')+
+  ggtitle("이미용 편성 방안")+
+  labs(x="시간", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15))+
+  scale_x_discrete(limits=c(6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25))
+
+beauty_eda
+
+stuff<-broad%>%filter(group0==10)%>%group_by(time)%>%summarize(cumsum=mean(cumsum))
+stuff_eda<-ggplot(data=stuff, aes(x=time, y=cumsum, fill=time))+
+  theme_bw()+
+  geom_line(stat='identity')+
+  ggtitle("잡화 편성 방안")+
+  labs(x="시간", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15))+
+  scale_x_discrete(limits=c(6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25))
+
+stuff_eda
+
+kitchen<-broad%>%filter(group0==11)%>%group_by(time)%>%summarize(cumsum=mean(cumsum))
+kitchen_eda<-ggplot(data=kitchen, aes(x=time, y=cumsum, fill=time))+
+  theme_bw()+
+  geom_line(stat='identity')+
+  ggtitle("주방 편성 방안")+
+  labs(x="시간", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15))+
+  scale_x_discrete(limits=c(6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25))
+
+kitchen_eda
+
+bedding<-broad%>%filter(group0==12)%>%group_by(time)%>%summarize(cumsum=mean(cumsum))
+bedding_eda<-ggplot(data=bedding, aes(x=time, y=cumsum, fill=time))+
+  theme_bw()+
+  geom_line(stat='identity')+
+  ggtitle("침구 편성 방안")+
+  labs(x="시간", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15))+
+  scale_x_discrete(limits=c(6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25))
+
+bedding_eda
+```
+
+
+## 요일별 
+```{r}
+monday<-broad%>%filter(weekday==1)%>%group_by(Product_group)%>%summarize(cumsum=mean(cumsum))
+monday_eda<-ggplot(data=monday, aes(x=Product_group, y=cumsum, fill=Product_group))+
+  theme_bw()+
+  geom_bar(stat='identity')+
+  ggtitle("월요일 편성 방안")+
+  scale_fill_manual(values =pal)+
+  labs(x="상품군 대분류", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),
+        legend.position='none')
+
+monday_eda
+monday_sub<-broad%>%filter(weekday==1)%>%group_by(sub)%>%summarize(cumsum=mean(cumsum))
+o = order(monday_sub$cumsum, decreasing=TRUE)
+monday_sub<-monday_sub[o,]
+monday_sub<-monday_sub[1:20,]
+monday_sub<- monday_sub[c(order(monday_sub$cumsum)),] 
+monday_sub_eda<-ggplot(data=monday_sub, aes(x=sub, y=cumsum, fill=sub))+
+  theme_bw()+
+  geom_bar(stat='identity')+
+  ggtitle("월요일 편성 방안")+
+  coord_flip()+
+  
+  labs(x="상품군 중분류", y="취급액")+
+  scale_fill_manual(values =pal1)+
+  theme(axis.text=element_text(size=8),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),
+        legend.position='none')+
+  scale_x_discrete(limits=monday_sub$sub)
+
+monday_sub_eda
+```
+
+```{r}
+tuesday<-broad%>%filter(weekday==2)%>%group_by(Product_group)%>%summarize(cumsum=mean(cumsum))
+tuesday_eda<-ggplot(data=tuesday, aes(x=Product_group, y=cumsum, fill=Product_group))+
+  theme_bw()+
+  geom_bar(stat='identity')+
+  ggtitle("화요일 편성 방안")+
+  scale_fill_manual(values =pal)+
+  labs(x="상품군 대분류", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),legend.position='none')
+
+tuesday_eda
+
+tuesday_sub<-broad%>%filter(weekday==2)%>%group_by(sub)%>%summarize(cumsum=mean(cumsum))
+o = order(tuesday_sub$cumsum, decreasing=TRUE)
+tuesday_sub<-tuesday_sub[o,]
+tuesday_sub<-tuesday_sub[1:20,]
+tuesday_sub<- tuesday_sub[c(order(tuesday_sub$cumsum)),] 
+tuesday_sub_eda<-ggplot(data=tuesday_sub, aes(x=sub, y=cumsum, fill=sub))+
+  theme_bw()+
+  geom_bar(stat='identity')+
+  ggtitle("화요일 편성 방안")+
+  coord_flip()+
+  labs(x="상품군 중분류", y="취급액")+
+  scale_fill_manual(values =pal1)+
+  theme(axis.text=element_text(size=8),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),
+        legend.position='none')+
+  scale_x_discrete(limits=tuesday_sub$sub)
+
+tuesday_sub_eda
+```
+
+```{r}
+wendesday<-broad%>%filter(weekday==3)%>%group_by(Product_group)%>%summarize(cumsum=mean(cumsum))
+wendesday_eda<-ggplot(data=wendesday, aes(x=Product_group, y=cumsum, fill=Product_group))+
+  theme_bw()+
+  geom_bar(stat='identity')+
+  ggtitle("수요일 편성 방안")+
+  scale_fill_manual(values =pal)+
+  labs(x="상품군 대분류", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),legend.position='none')
+
+wendesday_eda
+
+wendesday_sub<-broad%>%filter(weekday==3)%>%group_by(sub)%>%summarize(cumsum=mean(cumsum))
+o = order(wendesday_sub$cumsum, decreasing=TRUE)
+wendesday_sub<-wendesday_sub[o,]
+wendesday_sub<-wendesday_sub[1:20,]
+wendesday_sub<- wendesday_sub[c(order(wendesday_sub$cumsum)),] 
+wendesday_sub_eda<-ggplot(data=wendesday_sub, aes(x=sub, y=cumsum, fill=sub))+
+  theme_bw()+
+  geom_bar(stat='identity')+
+  ggtitle("수요일 편성 방안")+
+  coord_flip()+
+  labs(x="상품군 중분류", y="취급액")+
+  scale_fill_manual(values =pal1)+
+  theme(axis.text=element_text(size=8),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),
+        legend.position='none')+
+  scale_x_discrete(limits=wendesday_sub$sub)
+
+wendesday_sub_eda
+```
+
+
+```{r}
+thursday<-broad%>%filter(weekday==4)%>%group_by(Product_group)%>%summarize(cumsum=mean(cumsum))
+thursday_eda<-ggplot(data=thursday, aes(x=Product_group, y=cumsum, fill=Product_group))+
+  theme_bw()+
+  geom_bar(stat='identity')+
+  ggtitle("목요일 편성 방안")+
+  scale_fill_manual(values =pal)+
+  labs(x="상품군 대분류", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),legend.position='none')
+
+thursday_eda
+
+
+thursday_sub<-broad%>%filter(weekday==4)%>%group_by(sub)%>%summarize(cumsum=mean(cumsum))
+o = order(thursday_sub$cumsum, decreasing=TRUE)
+thursday_sub<-thursday_sub[o,]
+thursday_sub<-thursday_sub[1:20,]
+thursday_sub<- thursday_sub[c(order(thursday_sub$cumsum)),] 
+thursday_sub_eda<-ggplot(data=thursday_sub, aes(x=sub, y=cumsum, fill=sub))+
+  theme_bw()+
+  geom_bar(stat='identity')+
+  ggtitle("목요일 편성 방안")+
+  coord_flip()+
+  labs(x="상품군 중분류", y="취급액")+
+  theme(axis.text=element_text(size=8),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),
+        legend.position='none')+
+    scale_fill_manual(values =pal1)+
+  scale_x_discrete(limits=thursday_sub$sub)
+
+thursday_sub_eda
+```
+
+
+```{r}
+friday<-broad%>%filter(weekday==5)%>%group_by(Product_group)%>%summarize(cumsum=mean(cumsum))
+friday_eda<-ggplot(data=friday, aes(x=Product_group, y=cumsum, fill=Product_group))+
+  theme_bw()+
+  geom_bar(stat='identity')+
+  ggtitle("금요일 편성 방안")+
+  scale_fill_manual(values =pal)+
+  labs(x="상품군 대분류", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),legend.position='none')
+
+friday_eda
+
+
+
+friday_sub<-broad%>%filter(weekday==5)%>%group_by(sub)%>%summarize(cumsum=mean(cumsum))
+o = order(friday_sub$cumsum, decreasing=TRUE)
+friday_sub<-friday_sub[o,]
+friday_sub<-friday_sub[1:20,]
+friday_sub<- friday_sub[c(order(friday_sub$cumsum)),] 
+friday_sub_eda<-ggplot(data=friday_sub, aes(x=sub, y=cumsum, fill=sub))+
+  theme_bw()+
+  geom_bar(stat='identity')+
+  ggtitle("금요일 편성 방안")+
+  coord_flip()+
+  labs(x="상품군 중분류", y="취급액")+
+  theme(axis.text=element_text(size=8),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),
+        legend.position='none')+
+    scale_fill_manual(values =pal1)+
+  scale_x_discrete(limits=friday_sub$sub)
+
+friday_sub_eda
+```
+
+```{r}
+saturday<-broad%>%filter(weekday==6)%>%group_by(Product_group)%>%summarize(cumsum=mean(cumsum))
+saturday_eda<-ggplot(data=saturday, aes(x=Product_group, y=cumsum, fill=Product_group))+
+  theme_bw()+
+  geom_bar(stat='identity')+
+  ggtitle("토요일 편성 방안")+
+  scale_fill_manual(values =pal)+
+  labs(x="상품군 대분류", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),legend.position='none')
+
+saturday_eda
+
+
+saturday_sub<-broad%>%filter(weekday==6)%>%group_by(sub)%>%summarize(cumsum=mean(cumsum))
+o = order(saturday_sub$cumsum, decreasing=TRUE)
+saturday_sub<-saturday_sub[o,]
+saturday_sub<-saturday_sub[1:20,]
+saturday_sub<- saturday_sub[c(order(saturday_sub$cumsum)),] 
+saturday_sub_eda<-ggplot(data=saturday_sub, aes(x=sub, y=cumsum, fill=sub))+
+  theme_bw()+
+  geom_bar(stat='identity')+
+  ggtitle("토요일 편성 방안")+
+  coord_flip()+
+  labs(x="상품군 중분류", y="취급액")+
+  theme(axis.text=element_text(size=8),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),
+        legend.position='none')+
+    scale_fill_manual(values =pal1)+
+  scale_x_discrete(limits=saturday_sub$sub)
+
+saturday_sub_eda
+```
+
+```{r}
+sunday<-broad%>%filter(weekday==7)%>%group_by(Product_group)%>%summarize(cumsum=mean(cumsum))
+sunday_eda<-ggplot(data=sunday, aes(x=Product_group, y=cumsum, fill=Product_group))+
+  theme_bw()+
+  geom_bar(stat='identity')+
+  ggtitle("일요일 편성 방안")+
+  scale_fill_manual(values =pal)+
+  labs(x="상품군 대분류", y="취급액")+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),legend.position='none')
+
+sunday_eda
+
+sunday_sub<-broad%>%filter(weekday==7)%>%group_by(sub)%>%summarize(cumsum=mean(cumsum))
+o = order(sunday_sub$cumsum, decreasing=TRUE)
+sunday_sub<-sunday_sub[o,]
+sunday_sub<-sunday_sub[1:20,]
+sunday_sub<- sunday_sub[c(order(sunday_sub$cumsum)),] 
+sunday_sub_eda<-ggplot(data=sunday_sub, aes(x=sub, y=cumsum, fill=sub))+
+  theme_bw()+
+  geom_bar(stat='identity')+
+  ggtitle("일요일 편성 방안")+
+  coord_flip()+
+  labs(x="상품군 중분류", y="취급액")+
+  theme(axis.text=element_text(size=8),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(hjust=0.5, size=15),
+        legend.position='none')+
+    scale_fill_manual(values =pal1)+
+  scale_x_discrete(limits=sunday_sub$sub)
+
+
+sunday_sub_eda
+```
