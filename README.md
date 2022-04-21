@@ -29,7 +29,7 @@
 ## 3. Process   
 분석은 다음 순서로 진행됩니다. 화살표를 **클릭**하시면 자세한 설명을 참고하실 수 있습니다.   
 <details>
-<summary> 1. 변수 생성 </summary>
+<summary> <b> <code> 1. 변수 생성 </code> </b> </summary>
 <div markdown="1">   
    
  
@@ -53,7 +53,7 @@
 
 
 <details>
-<summary>2. 변수 정제 및 결측값 제거</summary>
+<summary> <b> <code> 2. 변수 정제 및 결측값 제거 </code> </b> </summary>
 <div markdown="1">
  
   
@@ -66,7 +66,7 @@
 
 
 <details>
-<summary> 3. Modeling </summary>
+<summary> <b> <code> 3. Modeling </code> </b> </summary>
 <div markdown="1">
 
  * 알고리즘별 성능을 **비교**한 뒤 Gradient Boosting Model을 선택합니다.
@@ -80,7 +80,7 @@
 
    
 <details>
-<summary> 4. 날짜별 최적 편성 방안 </summary>
+<summary> <b> <code> 4. 날짜별 최적 편성 방안 </code> </b> </summary>
 <div markdown="1">
 
  * 요일별 및 시간별 최적 편성 방안을 만들기 위해 총 매출액과 상품가격의 **중앙값**을 이용하여 새로운 데이터를 생성합니다.   
